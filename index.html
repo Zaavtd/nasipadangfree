@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Minecraft Love Letter</title>
+
+  <!-- Font Retro untuk isi surat -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <style>
+    @font-face {
+      font-family: 'MinecrafterAlt';
+      src: url('MinecrafterAlt.woff2') format('woff2');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('back.jpeg');
+      background-size: cover;
+      background-position: center;
+      font-family: 'Press Start 2P', cursive;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    .title {
+      font-family: 'MinecrafterAlt', sans-serif;
+      font-size: 36px;
+      color: #3c3c3c;
+      text-shadow: 2px 2px #000;
+      margin-bottom: 20px;
+      animation: fadeIn 1.5s ease-in;
+    }
+
+    #letter-box {
+      background-color: rgba(50, 50, 50, 0.9);
+      border: 4px solid #5c4033;
+      padding: 30px;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #000;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #letter-text {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 14px;
+    }
+
+    #next-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #7cfc00;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 8px;
+      box-shadow: 0 4px #4caf50;
+    }
+
+    #next-button:hover {
+      background-color: #6bd100;
+    }
+
+    .heart {
+      position: absolute;
+      background: url('heard.png') no-repeat center center / contain;
+      animation: floatUp 1s ease-out forwards;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      0% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-100px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .spotify-link {
+      color: #7cfc00;
+      text-decoration: none;
+    }
+
+    .spotify-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="title">P mabar minikrep</div>
+
+  <div id="letter-box">
+    <p id="letter-text"></p>
+    <button id="next-button">ANJAY BUTTON</button>
+  </div>
+
+  <audio id="click-sound" src="https://www.myinstants.com/media/sounds/minecraft_click.mp3"></audio>
+  <audio id="confetti-sound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_b163e7df7c.mp3"></audio>
+
+  <script>
+    const letter = [
+      "Hi gusy",
+      "I love you",
+      "Aku cinta nasi padang",
+      "Tapi",
+      "Aku juga",
+      "Cinta",
+      "Kalian",
+      "Mwah",
+      "Salam nasi padang",
+      '<a href="https://open.spotify.com/track/7aSyG7cskkG3zhfO2JLxq3?si=0duzXJtPR-qa7kHKpgbAQA" class="spotify-link" target="_blank">lagu keren ini</a>'
+    ];
+
+    let index = 0;
+    const letterText = document.getElementById('letter-text');
+    const nextButton = document.getElementById('next-button');
+    const clickSound = document.getElementById('click-sound');
+    const confettiSound = document.getElementById('confetti-sound');
+    const letterBox = document.getElementById('letter-box');
+
+    function showHeartEffect() {
+      for (let i = 0; i < 5; i++) {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        const size = Math.random() * 20 + 10;
+        heart.style.width = heart.style.height = `${size}px`;
+        heart.style.left = Math.random() * 90 + '%';
+        heart.style.top = Math.random() * 90 + '%';
+        letterBox.appendChild(heart);
+        setTimeout(() => heart.remove(), 1000);
+      }
+    }
+
+    function typeWriter(text, i = 0) {
+      if (i < text.length) {
+        letterText.innerHTML += text.charAt(i);
+        setTimeout(() => typeWriter(text, i + 1), 30);
+      }
+    }
+
+    function showNextLine() {
+      clickSound.play();
+      showHeartEffect();
+
+      if (index < letter.length) {
+        letterText.innerHTML = '';
+        const currentText = letter[index];
+        if (currentText.includes('<a')) {
+          letterText.innerHTML = currentText;
+        } else {
+          typeWriter(currentText);
+        }
+
+        index++;
+        if (index === letter.length) {
+          nextButton.textContent = 'BALAS';
+        }
+      } else {
+        confettiSound.play();
+        alert('Salam nasi padang dari kanja');
+        index = 0;
+        nextButton.textContent = 'ANJAY BUTTON';
+        letterText.innerHTML = '';
+      }
+    }
+
+    nextButton.addEventListener('click', showNextLine);
+    showNextLine();
+  </script>
+</body>
+</html>
